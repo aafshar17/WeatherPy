@@ -1,0 +1,40 @@
+for i, city in enumerate(cities_list):
+    
+    # group cities in sets of 50 for logging purposes
+    if (i % 50 == 0 and i >= 50):
+        set_count += 1
+        record_count = 0
+    
+    # build the query url
+    city_url = url + "&q=" + urllib.request.pathname2url(city)
+    
+    print("Processing Record %s of Set %s | %s" % (record_count, set_count, city))
+    print(city_url)
+    
+    # update record count
+    record_count += 1
+    
+    try:
+        # grab json data using API request
+        city_weather = requests.get(city_url).json()
+        
+        # parse the data
+        city_lat = city_weather["coord"]["lat"]
+        city_lng = city_weather["coord"]["lon"]
+        city_temp = city_weather["main"]["temp"]
+        city_hum_percent = city_weather["main"]["humidity"]
+        city_cloud_percent = city_weather["clouds"]["all"]
+        city_wind_speed = city_weather["wind"]["speed"]
+        
+        city_data.append({"city": city,
+                          "lat": city_lat,
+                          "lon": city_lng,
+                          "temp": city_temp,
+                          "humidity perc": city_hum_percent,
+                          "cloudiness perc": city_cloud_percent,
+                          "wind speed": city_wind_speed
+                         })
+            
+    except:
+        print("city not found")
+        pass
